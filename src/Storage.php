@@ -64,16 +64,14 @@ class Storage
                 LEFT JOIN sizes as s ON ts.sizeId = s.id";
 
         $where = "p.id = :id";
+        $params = ['id' => $id];
         if ($sizeId !== null) {
             $where .= " AND s.id = :sizeId";
+            $params['sizeId'] = $sizeId;
         }
 
         $stmt = $this->pdo->prepare($sql . " WHERE " . $where);
-        if ($sizeId !== null) {
-            $stmt->execute(['id' => $id, 'sizeId' => $sizeId]);
-        } else {
-            $stmt->execute(['id' => $id]);
-        }
+        $stmt->execute($params);
         return $stmt->fetch();
     }
 
